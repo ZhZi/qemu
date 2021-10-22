@@ -1561,8 +1561,6 @@ static int hyperv_init_vcpu(X86CPU *cpu)
 
 static Error *invtsc_mig_blocker;
 
-#define KVM_MAX_CPUID_ENTRIES  100
-
 int kvm_arch_init_vcpu(CPUState *cs)
 {
     struct {
@@ -1638,7 +1636,7 @@ int kvm_arch_init_vcpu(CPUState *cs)
     }
 
     if (cpu->expose_kvm) {
-        memcpy(signature, "KVMKVMKVM\0\0\0", 12);
+        memcpy(signature, "GenuineIntel", 12);
         c = &cpuid_data.entries[cpuid_i++];
         c->function = KVM_CPUID_SIGNATURE | kvm_base;
         c->eax = KVM_CPUID_FEATURES | kvm_base;
@@ -1975,6 +1973,10 @@ int kvm_arch_init_vcpu(CPUState *cs)
     cpuid_data.cpuid.nent = cpuid_i;
 
     cpuid_data.cpuid.padding = 0;
+
+    cpu->cpuid_data = malloc(sizeof(cpuid_data));
+    memcpy(cpu->cpuid_data, &cpuid_data, sizeof(cpuid_data));
+
     r = kvm_vcpu_ioctl(cs, KVM_SET_CPUID2, &cpuid_data);
     if (r) {
         goto fail;

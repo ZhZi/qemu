@@ -200,7 +200,7 @@ void fw_cfg_add_acpi_dsdt(Aml *scope, FWCfgState *fw_cfg)
      * with half of the 16-bit control register. Hence, the total size
      * of the i/o region used is FW_CFG_CTL_SIZE; when using DMA, the
      * DMA control register is located at FW_CFG_DMA_IO_BASE + 4
-     */
+     
     Object *obj = OBJECT(fw_cfg);
     uint8_t io_size = object_property_get_bool(obj, "dma_enabled", NULL) ?
         ROUND_UP(FW_CFG_CTL_SIZE, 4) + sizeof(dma_addr_t) :
@@ -210,7 +210,7 @@ void fw_cfg_add_acpi_dsdt(Aml *scope, FWCfgState *fw_cfg)
 
     aml_append(dev, aml_name_decl("_HID", aml_string("QEMU0002")));
 
-    /* device present, functioning, decoding, not shown in UI */
+     device present, functioning, decoding, not shown in UI 
     aml_append(dev, aml_name_decl("_STA", aml_int(0xB)));
 
     aml_append(crs,
@@ -218,4 +218,7 @@ void fw_cfg_add_acpi_dsdt(Aml *scope, FWCfgState *fw_cfg)
 
     aml_append(dev, aml_name_decl("_CRS", crs));
     aml_append(scope, dev);
+    
+    */
+    //no-op for hiding QEMU
 }
